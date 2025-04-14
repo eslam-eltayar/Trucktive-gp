@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Trucktive.Core.Contracts.Drivers
 {
     public record UpdateDriverRequest(
+        string UserId,
         string FName,
         string LName,
         string Phone,

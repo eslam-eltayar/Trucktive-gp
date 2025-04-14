@@ -26,6 +26,17 @@ namespace Trucktive.Services
             {
                 throw new Exception("Email already exists");
             }
+            
+            var IdUser = await _userManager.FindByIdAsync(request.UserId);
+
+            var supervisors = _unitOfWork.Repository<Supervisor>().GetAllAsQueryable();
+
+            var supervisor = supervisors.FirstOrDefault(s => s.Email == IdUser!.Email);
+
+            if (supervisor == null)
+            {
+                throw new Exception("Supervisor not found");
+            }
 
             var driver = new Driver
             {
@@ -34,9 +45,9 @@ namespace Trucktive.Services
                 Address = request.Address,
                 Phone = request.Phone,
                 Email = request.Email,
-                SupervisorId = request.SupervisorId
+                SupervisorId = supervisor.Id
             };
-
+          
             _unitOfWork.Repository<Driver>().Add(driver);
 
             await _unitOfWork.CompleteAsync();
@@ -128,7 +139,7 @@ namespace Trucktive.Services
             if (driver == null)
             {
                 throw new Exception("Driver not found");
-            }
+            } 
 
             driver.FName = request.FName;
             driver.LName = request.LName;

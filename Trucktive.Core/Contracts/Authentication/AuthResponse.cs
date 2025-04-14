@@ -12,6 +12,7 @@ namespace Trucktive.Core.Contracts.Authentication
     string FirstName,
     string LastName,
     string Token,
-    int ExpiresIn
-);
+    int ExpiresIn,
+    string Role
+    );
 }

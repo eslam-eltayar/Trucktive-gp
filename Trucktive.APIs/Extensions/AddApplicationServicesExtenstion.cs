@@ -28,6 +28,12 @@ namespace Trucktive.APIs.Extensions
                 options =>
                 options.UseSqlServer(connectionString));
 
+            Services.AddCors(options =>
+            options.AddDefaultPolicy(builder =>
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader() 
+            ));
 
             Services.AddAuthConfig(configuration);
 

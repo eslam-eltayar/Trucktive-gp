@@ -17,9 +17,6 @@ namespace Trucktive.Services
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
 
-        private readonly int _refreshTokenExpiryDays = 14;
-
-
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -34,7 +31,8 @@ namespace Trucktive.Services
 
             var (token, expiresIn) = _jwtProvider.GenerateToken(user);
 
-            
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "User";
 
             var response = new AuthResponse(
                 user.Id,
@@ -42,8 +40,9 @@ namespace Trucktive.Services
                 user.FirstName,
                 user.LastName,
                 token,
-                expiresIn 
-                );
+                expiresIn,
+                role
+            );
 
             //return Result<AuthResponse>.Success(response);
 
